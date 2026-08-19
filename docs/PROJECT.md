@@ -132,8 +132,7 @@ The main content and form areas should remain calm and highly readable.
 The existing brand uses expressive script lettering for the Adrytentaciones
 name.
 
-Use expressive or script typography only for branding moments such as the logo
-or important decorative headings.
+Use expressive or script typography only for the Adrytentaciones wordmark.
 
 Do not use script typography for:
 
@@ -144,7 +143,14 @@ Do not use script typography for:
 - navigation;
 - body text.
 
-Functional UI typography must remain simple and highly legible.
+Use Nunito Sans for functional interface typography. It should feel warm,
+friendly, substantial, and highly legible. Avoid thin font weights. Use weight
+500 for body and input text, 600 for labels, 700 for section headings, and 700
+or 800 for page headings, totals, and important monetary values.
+
+Do not use eyebrow-style labels anywhere in the product. Do not add small
+uppercase pre-headings above titles. Express important information through the
+actual heading, normal metadata, field labels, or simple status text.
 
 ### Shape language
 

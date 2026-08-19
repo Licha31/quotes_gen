@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Presupuestador de Adrytentaciones">
+    <title>{% block title %}Adrytentaciones{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a
+          class="brand"
+          href="{{ url_for('new_quote') }}"
+          aria-label="Adrytentaciones, nuevo presupuesto"
+        >
+          <span class="brand__name">Adrytentaciones</span>
+          <span class="brand__tagline">Pastelería artesanal</span>
+        </a>
+
+        <div class="page-context" aria-label="Sección actual">
+          <span class="page-context__label">Presupuestador</span>
+          <span class="page-context__status">
+            <span class="page-context__dot" aria-hidden="true"></span>
+            Nuevo
+          </span>
+        </div>
+      </div>
+      <div class="icing-line" aria-hidden="true"><span></span></div>
+    </header>
+
+    <main class="page-shell">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo presupuesto · Adrytentaciones{% endblock %}
+
+{% block content %}
+  <section class="page-intro" aria-labelledby="page-title">
+    <div class="page-intro__copy">
+      <h1 id="page-title">Armemos un pedido claro y especial.</h1>
+      <p>
+        Cargá los datos del cliente y del pedido. El resumen queda siempre a mano
+        para que cotizar sea rápido y simple.
+      </p>
+    </div>
+
+    <div class="draft-stamp" aria-label="Estado del presupuesto: borrador">
+      <span>Borrador · sin número</span>
+    </div>
+  </section>
+
+  <form class="quote-workspace" aria-labelledby="page-title">
+    <div class="form-sheet">
+      <section class="form-section" aria-labelledby="customer-heading">
+        <header class="section-heading">
+          <span class="section-heading__number" aria-hidden="true">01</span>
+          <div>
+            <h2 id="customer-heading">Cliente</h2>
+            <p>Los datos necesarios para identificar el presupuesto.</p>
+          </div>
+        </header>
+
+        <div class="field-grid field-grid--two">
+          <div class="field">
+            <label for="customer-name">Nombre</label>
+            <input
+              id="customer-name"
+              name="customer_name"
+              type="text"
+              placeholder="Ej. Carolina Pérez"
+              autocomplete="name"
+              required
+            >
+          </div>
+
+          <div class="field">
+            <label for="customer-phone">
+              Teléfono <span class="field__optional">Opcional</span>
+            </label>
+            <input
+              id="customer-phone"
+              name="customer_phone"
+              type="tel"
+              placeholder="Ej. 264 555 0123"
+              autocomplete="tel"
+            >
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="details-heading">
+        <header class="section-heading">
+          <span class="section-heading__number" aria-hidden="true">02</span>
+          <div>
+            <h2 id="details-heading">Fechas</h2>
+            <p>Cuándo se prepara y hasta cuándo es válida la propuesta.</p>
+          </div>
+        </header>
+
+        <div class="field-grid field-grid--two">
+          <div class="field">
+            <label for="quote-date">Fecha</label>
+            <input id="quote-date" name="quote_date" type="date" required>
+          </div>
+
+          <div class="field">
+            <label for="valid-until">Válido hasta</label>
+            <input id="valid-until" name="valid_until" type="date" required>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="items-heading">
+        <header class="section-heading">
+          <span class="section-heading__number" aria-hidden="true">03</span>
+          <div>
+            <h2 id="items-heading">Productos o servicios</h2>
+            <p>Describí cada producto tal como debe aparecer en el presupuesto.</p>
+          </div>
+        </header>
+
+        <article class="item-entry" aria-labelledby="item-one-heading">
+          <div class="item-entry__title">
+            <h3 id="item-one-heading">Producto 1</h3>
+            <span>Primer ítem</span>
+          </div>
+
+          <div class="item-entry__fields">
+            <div class="field item-entry__description">
+              <label for="item-description">Descripción</label>
+              <input
+                id="item-description"
+                name="item_description"
+                type="text"
+                placeholder="Ej. Torta personalizada 2 kg"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-quantity">Cantidad</label>
+              <input
+                id="item-quantity"
+                name="item_quantity"
+                type="number"
+                min="1"
+                step="1"
+                value="1"
+                inputmode="numeric"
+                required
+              >
+            </div>
+
+            <div class="field">
+              <label for="item-price">Precio unitario</label>
+              <div class="money-input">
+                <span aria-hidden="true">$</span>
+                <input
+                  id="item-price"
+                  name="item_price"
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="45.000,00"
+                  required
+                >
+              </div>
+            </div>
+
+            <div class="item-subtotal">
+              <span>Subtotal</span>
+              <output for="item-quantity item-price">$ 0,00</output>
+            </div>
+          </div>
+        </article>
+
+        <div class="future-action">
+          <button class="button button--secondary" type="button" disabled>
+            <span aria-hidden="true">＋</span>
+            Agregar otro producto
+          </button>
+          <span>Se habilitará al activar la carga del formulario.</span>
+        </div>
+      </section>
+
+      <section class="form-section" aria-labelledby="adjustments-heading">
+        <header class="section-heading">
+          <span class="section-heading__number" aria-hidden="true">04</span>
+          <div>
+            <h2 id="adjustments-heading">Ajustes finales</h2>
+            <p>Sumá un descuento fijo o una aclaración para el cliente.</p>
+          </div>
+        </header>
+
+        <div class="field-grid field-grid--discount">
+          <div class="field">
+            <label for="discount">Descuento</label>
+            <div class="money-input">
+              <span aria-hidden="true">$</span>
+              <input
+                id="discount"
+                name="discount"
+                type="text"
+                inputmode="decimal"
+                placeholder="0,00"
+              >
+            </div>
+            <span class="field__hint">Monto fijo en pesos argentinos.</span>
+          </div>
+
+          <div class="field">
+            <label for="notes">
+              Notas <span class="field__optional">Opcional</span>
+            </label>
+            <textarea
+              id="notes"
+              name="notes"
+              rows="4"
+              placeholder="Ej. Seña, entrega o detalles de decoración"
+            ></textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="quote-summary" aria-labelledby="summary-heading">
+      <div class="quote-summary__icing" aria-hidden="true"><span></span></div>
+      <div class="quote-summary__header">
+        <h2 id="summary-heading">Resumen</h2>
+      </div>
+
+      <dl class="totals">
+        <div>
+          <dt>Subtotal</dt>
+          <dd>$ 0,00</dd>
+        </div>
+        <div>
+          <dt>Descuento</dt>
+          <dd>− $ 0,00</dd>
+        </div>
+        <div class="totals__final">
+          <dt>Total</dt>
+          <dd aria-live="polite">$ 0,00</dd>
+        </div>
+      </dl>
+
+      <p class="quote-summary__note">
+        Los importes se calcularán automáticamente al activar el formulario.
+      </p>
+
+      <button
+        class="button button--primary"
+        type="button"
+        disabled
+        aria-describedby="submit-availability"
+      >
+        Crear presupuesto
+      </button>
+      <span id="submit-availability" class="availability-note">
+        El guardado estará disponible en la próxima iteración.
+      </span>
+    </aside>
+  </form>
+{% endblock %}

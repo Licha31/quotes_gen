@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, Request, status
-from fastapi.responses import Response
+from fastapi.responses import RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import ValidationError
@@ -149,6 +149,11 @@ def _quote_context(quote: QuoteCreate) -> dict[str, Any]:
         "discount": format_ars(quote.discount),
         "total": format_ars(total),
     }
+
+
+@app.get("/")
+def root(request: Request):
+    return RedirectResponse(url=request.url_for("new_quote"))
 
 
 @app.get("/quotes/new", name="new_quote")

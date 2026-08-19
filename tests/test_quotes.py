@@ -5,6 +5,13 @@ from app.main import app
 client = TestClient(app)
 
 
+def test_root_redirects_to_new_quote() -> None:
+    response = client.get("/", follow_redirects=False)
+
+    assert response.status_code == 307
+    assert response.headers["location"] == "http://testserver/quotes/new"
+
+
 def test_new_quote_page_renders() -> None:
     response = client.get("/quotes/new")
 

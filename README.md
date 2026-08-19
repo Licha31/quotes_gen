@@ -12,7 +12,11 @@ clara.
 
 ```powershell
 uv sync
+uv run playwright install chromium
 ```
+
+Chromium se instala una sola vez y debe volver a instalarse cuando una
+actualización de Playwright lo requiera.
 
 ## Ejecutar la aplicación
 

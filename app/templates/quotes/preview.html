@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Presupuesto para {{ quote.customer_name }} · Adrytentaciones{% endblock %}
+
+{% block content %}
+  <section class="page-intro" aria-labelledby="page-title">
+    <div class="page-intro__copy">
+      <h1 id="page-title">Presupuesto para {{ quote.customer_name }}</h1>
+      <p>Revisá la información calculada por el servidor antes de continuar.</p>
+    </div>
+
+    <div class="draft-stamp" aria-label="Estado del presupuesto">
+      <span>Vista previa · sin guardar</span>
+    </div>
+  </section>
+
+  <div class="quote-workspace quote-preview">
+    <article class="form-sheet">
+      <section class="form-section" aria-labelledby="preview-customer-heading">
+        <header class="section-heading">
+          <span class="section-heading__number" aria-hidden="true">01</span>
+          <div>
+            <h2 id="preview-customer-heading">Cliente y fechas</h2>
+            <p>Datos incluidos en este presupuesto.</p>
+          </div>
+        </header>
+
+        <dl class="preview-details">
+          {% if quote.quote_number %}
+            <div>
+              <dt>Número</dt>
+              <dd>{{ quote.quote_number }}</dd>
+            </div>
+          {% endif %}
+          <div>
+            <dt>Cliente</dt>
+            <dd>{{ quote.customer_name }}</dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd>{{ quote.customer_phone or "No informado" }}</dd>
+          </div>
+          <div>
+            <dt>Fecha</dt>
+            <dd>{{ quote_date }}</dd>
+          </div>
+          <div>
+            <dt>Válido hasta</dt>
+            <dd>{{ valid_until }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="form-section" aria-labelledby="preview-items-heading">
+        <header class="section-heading">
+          <span class="section-heading__number" aria-hidden="true">02</span>
+          <div>
+            <h2 id="preview-items-heading">Productos o servicios</h2>
+            <p>Importes recalculados con los datos enviados.</p>
+          </div>
+        </header>
+
+        <div class="preview-table-wrap">
+          <table class="preview-table">
+            <caption class="visually-hidden">Detalle de productos del presupuesto</caption>
+            <thead>
+              <tr>
+                <th scope="col">Descripción</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Precio unitario</th>
+                <th scope="col">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in items %}
+                <tr>
+                  <td>{{ item.description }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.unit_price }}</td>
+                  <td>{{ item.subtotal }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {% if quote.notes %}
+        <section class="form-section" aria-labelledby="preview-notes-heading">
+          <header class="section-heading">
+            <span class="section-heading__number" aria-hidden="true">03</span>
+            <div>
+              <h2 id="preview-notes-heading">Notas</h2>
+              <p>Aclaraciones para acompañar el presupuesto.</p>
+            </div>
+          </header>
+          <p class="preview-notes">{{ quote.notes }}</p>
+        </section>
+      {% endif %}
+    </article>
+
+    <aside class="quote-summary" aria-labelledby="preview-summary-heading">
+      <div class="quote-summary__icing" aria-hidden="true"><span></span></div>
+      <div class="quote-summary__header">
+        <h2 id="preview-summary-heading">Resumen</h2>
+      </div>
+
+      <dl class="totals">
+        <div>
+          <dt>Subtotal</dt>
+          <dd>{{ subtotal }}</dd>
+        </div>
+        <div>
+          <dt>Descuento</dt>
+          <dd>− {{ discount }}</dd>
+        </div>
+        <div class="totals__final">
+          <dt>Total</dt>
+          <dd>{{ total }}</dd>
+        </div>
+      </dl>
+
+      <p class="quote-summary__note">
+        El PDF se genera al descargarlo y no queda guardado en la aplicación.
+      </p>
+
+      <div class="preview-actions">
+        <form action="{{ url_for('download_quote_pdf') }}" method="post">
+          <input
+            type="hidden"
+            name="quote_number"
+            value="{{ quote.quote_number or '' }}"
+          >
+          <input type="hidden" name="customer_name" value="{{ quote.customer_name }}">
+          <input
+            type="hidden"
+            name="customer_phone"
+            value="{{ quote.customer_phone or '' }}"
+          >
+          <input type="hidden" name="quote_date" value="{{ quote.quote_date }}">
+          <input type="hidden" name="valid_until" value="{{ quote.valid_until }}">
+          {% for item in quote.items %}
+            <input type="hidden" name="item_description" value="{{ item.description }}">
+            <input type="hidden" name="item_quantity" value="{{ item.quantity }}">
+            <input type="hidden" name="item_unit_price" value="{{ item.unit_price }}">
+          {% endfor %}
+          <input type="hidden" name="discount" value="{{ quote.discount }}">
+          <input type="hidden" name="notes" value="{{ quote.notes or '' }}">
+
+          <button class="button button--primary" type="submit">Descargar PDF</button>
+        </form>
+
+        <a class="button button--secondary preview-back" href="{{ url_for('new_quote') }}">
+          Crear otro presupuesto
+        </a>
+      </div>
+    </aside>
+  </div>
+{% endblock %}

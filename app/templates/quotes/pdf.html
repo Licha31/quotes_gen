@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Presupuesto de Adrytentaciones</title>
+    <style>
+      @font-face {
+        font-family: "Nunito Sans";
+        font-style: normal;
+        font-weight: 200 1000;
+        src: url("data:font/ttf;base64,{{ nunito_font }}") format("truetype");
+      }
+
+      {{ pdf_css | safe }}
+    </style>
+  </head>
+  <body>
+    <main class="quote-document">
+      <header class="document-header">
+        <div class="document-brand">
+          <div class="document-brand__name">Adrytentaciones</div>
+          <div class="document-brand__tagline">Pastelería artesanal</div>
+        </div>
+        <address class="business-contact">
+          <strong>Adrytentaciones</strong>
+          <span>Pastelería artesanal</span>
+          <span>San Juan, Argentina</span>
+        </address>
+      </header>
+
+      <section class="document-title">
+        <div>
+          <h1>Presupuesto</h1>
+          <p>Preparado especialmente para {{ quote.customer_name }}.</p>
+        </div>
+        {% if quote.quote_number %}
+          <p class="quote-number">Número <strong>{{ quote.quote_number }}</strong></p>
+        {% endif %}
+      </section>
+
+      <dl class="quote-details">
+        <div>
+          <dt>Cliente</dt>
+          <dd>{{ quote.customer_name }}</dd>
+        </div>
+        {% if quote.customer_phone %}
+          <div>
+            <dt>Teléfono</dt>
+            <dd>{{ quote.customer_phone }}</dd>
+          </div>
+        {% endif %}
+        <div>
+          <dt>Fecha</dt>
+          <dd>{{ quote_date }}</dd>
+        </div>
+        <div>
+          <dt>Válido hasta</dt>
+          <dd>{{ valid_until }}</dd>
+        </div>
+      </dl>
+
+      <section class="items-section" aria-labelledby="items-title">
+        <h2 id="items-title">Detalle del pedido</h2>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th scope="col">Descripción</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio unitario</th>
+              <th scope="col">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              <tr>
+                <td>{{ item.description }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.unit_price }}</td>
+                <td>{{ item.subtotal }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+
+      <section class="document-summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Resumen</h2>
+        <dl>
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ subtotal }}</dd>
+          </div>
+          {% if quote.discount %}
+            <div>
+              <dt>Descuento</dt>
+              <dd>- {{ discount }}</dd>
+            </div>
+          {% endif %}
+          <div class="document-total">
+            <dt>Total</dt>
+            <dd>{{ total }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      {% if quote.notes %}
+        <section class="document-notes" aria-labelledby="notes-title">
+          <h2 id="notes-title">Notas</h2>
+          <p>{{ quote.notes }}</p>
+        </section>
+      {% endif %}
+
+      <footer class="document-footer">
+        <p>Gracias por elegir Adrytentaciones.</p>
+        <p>Pastelería artesanal · San Juan, Argentina</p>
+      </footer>
+    </main>
+  </body>
+</html>

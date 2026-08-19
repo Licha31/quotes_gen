@@ -13,32 +13,78 @@
     </div>
 
     <div class="draft-stamp" aria-label="Estado del presupuesto: borrador">
-      <span>Borrador · sin número</span>
+      <span>Borrador</span>
     </div>
   </section>
 
-  <form class="quote-workspace" aria-labelledby="page-title">
+  {% if errors %}
+    <section class="validation-summary" role="alert" aria-labelledby="errors-title">
+      <h2 id="errors-title">Revisá los datos del presupuesto</h2>
+      <p>Corregí los campos marcados antes de continuar.</p>
+    </section>
+  {% endif %}
+
+  <form
+    class="quote-workspace"
+    action="{{ url_for('create_quote') }}"
+    method="post"
+    aria-labelledby="page-title"
+  >
     <div class="form-sheet">
       <section class="form-section" aria-labelledby="customer-heading">
         <header class="section-heading">
           <span class="section-heading__number" aria-hidden="true">01</span>
           <div>
-            <h2 id="customer-heading">Cliente</h2>
+            <h2 id="customer-heading">Presupuesto y cliente</h2>
             <p>Los datos necesarios para identificar el presupuesto.</p>
           </div>
         </header>
 
         <div class="field-grid field-grid--two">
           <div class="field">
+            <label for="quote-number">
+              Número de presupuesto <span class="field__optional">Opcional</span>
+            </label>
+            <input
+              id="quote-number"
+              name="quote_number"
+              type="text"
+              value="{{ form.quote_number }}"
+              maxlength="32"
+              placeholder="Ej. 2026-015"
+              autocomplete="off"
+              {% if errors.get("quote_number") %}
+                aria-invalid="true"
+                aria-describedby="quote-number-error"
+              {% endif %}
+            >
+            {% if errors.get("quote_number") %}
+              <span id="quote-number-error" class="field__error">
+                {{ errors.quote_number }}
+              </span>
+            {% endif %}
+          </div>
+
+          <div class="field">
             <label for="customer-name">Nombre</label>
             <input
               id="customer-name"
               name="customer_name"
               type="text"
+              value="{{ form.customer_name }}"
               placeholder="Ej. Carolina Pérez"
               autocomplete="name"
               required
+              {% if errors.get("customer_name") %}
+                aria-invalid="true"
+                aria-describedby="customer-name-error"
+              {% endif %}
             >
+            {% if errors.get("customer_name") %}
+              <span id="customer-name-error" class="field__error">
+                {{ errors.customer_name }}
+              </span>
+            {% endif %}
           </div>
 
           <div class="field">
@@ -49,6 +95,7 @@
               id="customer-phone"
               name="customer_phone"
               type="tel"
+              value="{{ form.customer_phone }}"
               placeholder="Ej. 264 555 0123"
               autocomplete="tel"
             >
@@ -68,12 +115,42 @@
         <div class="field-grid field-grid--two">
           <div class="field">
             <label for="quote-date">Fecha</label>
-            <input id="quote-date" name="quote_date" type="date" required>
+            <input
+              id="quote-date"
+              name="quote_date"
+              type="date"
+              value="{{ form.quote_date }}"
+              required
+              {% if errors.get("quote_date") %}
+                aria-invalid="true"
+                aria-describedby="quote-date-error"
+              {% endif %}
+            >
+            {% if errors.get("quote_date") %}
+              <span id="quote-date-error" class="field__error">
+                {{ errors.quote_date }}
+              </span>
+            {% endif %}
           </div>
 
           <div class="field">
             <label for="valid-until">Válido hasta</label>
-            <input id="valid-until" name="valid_until" type="date" required>
+            <input
+              id="valid-until"
+              name="valid_until"
+              type="date"
+              value="{{ form.valid_until }}"
+              required
+              {% if errors.get("valid_until") %}
+                aria-invalid="true"
+                aria-describedby="valid-until-error"
+              {% endif %}
+            >
+            {% if errors.get("valid_until") %}
+              <span id="valid-until-error" class="field__error">
+                {{ errors.valid_until }}
+              </span>
+            {% endif %}
           </div>
         </div>
       </section>
@@ -87,66 +164,130 @@
           </div>
         </header>
 
-        <article class="item-entry" aria-labelledby="item-one-heading">
-          <div class="item-entry__title">
-            <h3 id="item-one-heading">Producto 1</h3>
-            <span>Primer ítem</span>
-          </div>
+        {% if errors.get("items") %}
+          <p class="field__error" role="alert">{{ errors["items"] }}</p>
+        {% endif %}
 
-          <div class="item-entry__fields">
-            <div class="field item-entry__description">
-              <label for="item-description">Descripción</label>
-              <input
-                id="item-description"
-                name="item_description"
-                type="text"
-                placeholder="Ej. Torta personalizada 2 kg"
-                required
-              >
-            </div>
-
-            <div class="field">
-              <label for="item-quantity">Cantidad</label>
-              <input
-                id="item-quantity"
-                name="item_quantity"
-                type="number"
-                min="1"
-                step="1"
-                value="1"
-                inputmode="numeric"
-                required
-              >
-            </div>
-
-            <div class="field">
-              <label for="item-price">Precio unitario</label>
-              <div class="money-input">
-                <span aria-hidden="true">$</span>
-                <input
-                  id="item-price"
-                  name="item_price"
-                  type="text"
-                  inputmode="decimal"
-                  placeholder="45.000,00"
-                  required
+        <div id="item-list">
+          {% for item in form["items"] %}
+            {% set item_index = loop.index0 %}
+            {% set description_error = errors.get("items." ~ item_index ~ ".description") %}
+            {% set quantity_error = errors.get("items." ~ item_index ~ ".quantity") %}
+            {% set price_error = errors.get("items." ~ item_index ~ ".unit_price") %}
+            <article
+              class="item-entry"
+              data-item-row
+              aria-labelledby="item-heading-{{ item_index }}"
+            >
+              <div class="item-entry__title">
+                <div class="item-entry__title-copy">
+                  <h3 id="item-heading-{{ item_index }}">
+                    Producto <span data-item-number>{{ loop.index }}</span>
+                  </h3>
+                  <span>Ítem del presupuesto</span>
+                </div>
+                <button
+                  class="item-remove"
+                  type="button"
+                  {% if form["items"]|length == 1 %}hidden{% endif %}
                 >
+                  Eliminar
+                </button>
               </div>
-            </div>
 
-            <div class="item-subtotal">
-              <span>Subtotal</span>
-              <output for="item-quantity item-price">$ 0,00</output>
-            </div>
-          </div>
-        </article>
+              <div class="item-entry__fields">
+                <div class="field item-entry__description">
+                  <label for="item-description-{{ item_index }}">Descripción</label>
+                  <input
+                    id="item-description-{{ item_index }}"
+                    name="item_description"
+                    type="text"
+                    value="{{ item.description }}"
+                    placeholder="Ej. Torta personalizada 2 kg"
+                    required
+                    {% if description_error %}
+                      aria-invalid="true"
+                      aria-describedby="item-description-error-{{ item_index }}"
+                    {% endif %}
+                  >
+                  {% if description_error %}
+                    <span
+                      id="item-description-error-{{ item_index }}"
+                      class="field__error"
+                    >
+                      {{ description_error }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <div class="field">
+                  <label for="item-quantity-{{ item_index }}">Cantidad</label>
+                  <input
+                    id="item-quantity-{{ item_index }}"
+                    name="item_quantity"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="{{ item.quantity }}"
+                    inputmode="numeric"
+                    required
+                    {% if quantity_error %}
+                      aria-invalid="true"
+                      aria-describedby="item-quantity-error-{{ item_index }}"
+                    {% endif %}
+                  >
+                  {% if quantity_error %}
+                    <span
+                      id="item-quantity-error-{{ item_index }}"
+                      class="field__error"
+                    >
+                      {{ quantity_error }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <div class="field">
+                  <label for="item-price-{{ item_index }}">Precio unitario</label>
+                  <div class="money-input{% if price_error %} money-input--error{% endif %}">
+                    <span aria-hidden="true">$</span>
+                    <input
+                      id="item-price-{{ item_index }}"
+                      name="item_unit_price"
+                      type="text"
+                      value="{{ item.unit_price }}"
+                      inputmode="decimal"
+                      placeholder="45.000,00"
+                      required
+                      {% if price_error %}
+                        aria-invalid="true"
+                        aria-describedby="item-price-error-{{ item_index }}"
+                      {% endif %}
+                    >
+                  </div>
+                  {% if price_error %}
+                    <span id="item-price-error-{{ item_index }}" class="field__error">
+                      {{ price_error }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <div class="item-subtotal">
+                  <span>Subtotal</span>
+                  <output
+                    for="item-quantity-{{ item_index }} item-price-{{ item_index }}"
+                    data-item-subtotal
+                  >{{ zero_amount }}</output>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
 
         <div class="future-action">
-          <button class="button button--secondary" type="button" disabled>
+          <button id="add-item" class="button button--secondary" type="button">
             <span aria-hidden="true">＋</span>
             Agregar otro producto
           </button>
-          <span>Se habilitará al activar la carga del formulario.</span>
         </div>
       </section>
 
@@ -162,17 +303,29 @@
         <div class="field-grid field-grid--discount">
           <div class="field">
             <label for="discount">Descuento</label>
-            <div class="money-input">
+            <div class="money-input{% if errors.get('discount') %} money-input--error{% endif %}">
               <span aria-hidden="true">$</span>
               <input
                 id="discount"
                 name="discount"
                 type="text"
+                value="{{ form.discount }}"
                 inputmode="decimal"
                 placeholder="0,00"
+                {% if errors.get("discount") %}
+                  aria-invalid="true"
+                  aria-describedby="discount-hint discount-error"
+                {% else %}
+                  aria-describedby="discount-hint"
+                {% endif %}
               >
             </div>
-            <span class="field__hint">Monto fijo en pesos argentinos.</span>
+            <span id="discount-hint" class="field__hint">
+              Monto fijo en pesos argentinos.
+            </span>
+            {% if errors.get("discount") %}
+              <span id="discount-error" class="field__error">{{ errors.discount }}</span>
+            {% endif %}
           </div>
 
           <div class="field">
@@ -184,7 +337,7 @@
               name="notes"
               rows="4"
               placeholder="Ej. Seña, entrega o detalles de decoración"
-            ></textarea>
+            >{{ form.notes }}</textarea>
           </div>
         </div>
       </section>
@@ -199,33 +352,28 @@
       <dl class="totals">
         <div>
           <dt>Subtotal</dt>
-          <dd>$ 0,00</dd>
+          <dd data-quote-subtotal>{{ zero_amount }}</dd>
         </div>
         <div>
           <dt>Descuento</dt>
-          <dd>− $ 0,00</dd>
+          <dd data-quote-discount>− {{ zero_amount }}</dd>
         </div>
         <div class="totals__final">
           <dt>Total</dt>
-          <dd aria-live="polite">$ 0,00</dd>
+          <dd data-quote-total aria-live="polite">{{ zero_amount }}</dd>
         </div>
       </dl>
 
       <p class="quote-summary__note">
-        Los importes se calcularán automáticamente al activar el formulario.
+        Los importes se actualizan mientras cargás el pedido y se verifican al
+        crear el presupuesto.
       </p>
 
-      <button
-        class="button button--primary"
-        type="button"
-        disabled
-        aria-describedby="submit-availability"
-      >
+      <button class="button button--primary" type="submit">
         Crear presupuesto
       </button>
-      <span id="submit-availability" class="availability-note">
-        El guardado estará disponible en la próxima iteración.
-      </span>
     </aside>
   </form>
+
+  <script src="{{ url_for('static', path='/quote-form.js') }}" defer></script>
 {% endblock %}

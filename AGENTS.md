@@ -9,19 +9,20 @@ customer quotes and export them as PDF files that can be shared with customers.
 
 The product should prioritize speed, simplicity, and usability.
 
-## Tech direction
+## Approved direction
 
-- Python is the main language.
-- Use FastAPI for the web application.
-- Use Pydantic for validation.
-- Use SQLite for initial persistence.
-- Use Jinja templates for the initial UI.
-- Use uv for Python dependency and environment management.
-- Use Ruff for linting and formatting.
-- Use pytest for tests.
-
-Do not introduce React, Vue, Angular, or another frontend framework unless
-explicitly requested or clearly justified.
+- Build the Android replacement with Flutter and Dart.
+- Keep all quote data in memory during the current session. Do not add a
+  database, saved drafts, quote history, accounts, backend calls, or network
+  requirements.
+- Generate the PDF only at the owner's request and share or save it through
+  Android.
+- Use integer centavos for money and one validated model for preview and PDF.
+- Preserve the existing FastAPI/Jinja app as a behavior and visual reference
+  until the Android replacement passes real-device acceptance.
+- Use Flutter's built-in widgets and local state unless a dependency has a
+  concrete purpose. Use Flutter analysis and tests for Android changes.
+- For changes to the existing web app, continue using uv, Ruff, and pytest.
 
 ## Product priorities
 
@@ -50,13 +51,14 @@ Do not add unless explicitly requested:
 - advanced CRM features;
 - cloud infrastructure;
 - unnecessary frontend frameworks.
+- persistence, synchronization, analytics, and a network requirement.
 
 ## Interface design
 
 Use the interface-design skill for meaningful UI creation and redesign work.
 
-The interface should follow the Adrytentaciones visual identity described in
-`docs/PROJECT.md`.
+The interface should follow `.interface-design/system.md` and
+`docs/PROJECT.md`, including a usable 320 logical pixel layout.
 
 The design should feel custom to the business rather than like a generic SaaS
 dashboard.
@@ -88,6 +90,9 @@ After implementing:
 4. Review the diff.
 5. Summarize what changed.
 6. Mention important tradeoffs or decisions.
+
+Do not retire Railway until the Android APK has passed acceptance on the
+intended phone and the user has approved the specific retirement action.
 
 ## Definition of done
 

@@ -1,0 +1,36 @@
+name: adrytentaciones
+description: Presupuestos locales de Adrytentaciones
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  pdf: ^3.13.1
+  printing: ^5.15.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - app/static/fonts/OFL.txt
+    - assets/fonts/OFL-DancingScript.txt
+    - assets/fonts/NunitoSans-500.ttf
+    - assets/fonts/NunitoSans-700.ttf
+    - assets/fonts/NunitoSans-800.ttf
+  fonts:
+    - family: NunitoSans
+      fonts:
+        - asset: app/static/fonts/NunitoSans-Variable.ttf
+    - family: DancingScript
+      fonts:
+        - asset: assets/fonts/DancingScript-Variable.ttf

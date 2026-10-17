@@ -8,3 +8,12 @@ htmlcov/
 .env
 .DS_Store
 Thumbs.db
+/.dart_tool/
+/.idea/
+/.flutter-plugins-dependencies
+/.metadata
+*.iml
+/build/
+/android/key.properties
+*.jks
+*.keystore

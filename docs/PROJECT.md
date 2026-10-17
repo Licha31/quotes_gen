@@ -16,8 +16,12 @@ Creating quotes manually takes unnecessary time and requires repeatedly
 formatting product descriptions, quantities, prices, totals, and business
 information.
 
-The application should allow a professional quote to be created in a few
-minutes and exported as a PDF ready to share with the customer.
+The approved replacement is a Flutter Android app that works entirely offline.
+It should create a professional quote in a few minutes and generate a PDF only
+when requested, ready to share or save through Android. Quote data is held in
+memory for the current session only: no database, persistent draft, history,
+account, backend, or synchronization. The existing FastAPI app remains as a
+reference until Android acceptance.
 
 ## Main workflow
 
@@ -41,7 +45,7 @@ minutes and exported as a PDF ready to share with the customer.
 
 ### Quote
 
-- Quote number
+- Quote number (optional, trimmed, at most 32 characters)
 - Date
 - Valid-until date
 - Notes (optional)
@@ -204,7 +208,8 @@ The quote total should always be easy to identify.
 
 Adding another item should require minimal effort.
 
-The application should work well on desktop and mobile.
+The Android app should remain usable at 320 logical pixels without hiding quote
+details. The existing web app remains a desktop and mobile reference.
 
 ## Non-goals for the MVP
 
@@ -219,3 +224,9 @@ The first version does not require:
 - advanced analytics;
 - React or another JavaScript frontend framework;
 - cloud deployment.
+- persistent quote or draft storage;
+- network access or analytics.
+
+The Android app uses integer centavos for all prices and totals. Validation,
+preview, and PDF must use the same quote model. Railway retirement requires
+real-device acceptance and separate approval of the identified resources.

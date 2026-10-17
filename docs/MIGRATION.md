@@ -41,10 +41,18 @@ the repository's OFL Nunito Sans variable font for readable headings and totals.
   and on an emulator set to 320 logical pixels. Airplane mode was disabled again
   after the test.
 
-## Required acceptance before retirement
+## Acceptance and web retirement
 
-The technical phone check passed. Owner review and acceptance of the APK and PDF
-remain necessary before retiring Railway. The local acceptance APK uses debug
-signing; an owner-held key is required for durable updates. Railway resources
-have not been identified or changed. Ticket 4 requires owner acceptance and
-separate approval for the exact retirement action.
+The owner accepted the installed APK and its PDF on 17 October 2026 and then
+approved deletion of the exact Railway service. In project `capable-motivation`,
+production service `presupuestos_gen` (ID
+`acfa8051-d5c4-4159-9653-5ca8df93ede1`) served
+`presupuestos.adrytentaciones.com.ar` from `Licha31/quotes_gen`. It was deleted
+on 17 October 2026. Railway subsequently reported zero services, no pending
+work, and no volumes or buckets in that production environment. The one running
+replica and its resource use ended. Other Railway projects and the GitHub source
+repository were not changed. Any external DNS record for the former custom
+domain must be managed separately by its DNS owner.
+
+The local acceptance APK uses debug signing. An owner-held key is needed for
+durable future updates under the same Android package name.

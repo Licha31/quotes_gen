@@ -77,6 +77,10 @@ teléfono. Una nueva apertura de la app mostró el formulario vacío. La pantall
 también se revisó en un emulador de 320 píxeles lógicos. Se restauró la conexión
 del teléfono al terminar.
 
-Falta la revisión y aceptación de la dueña del APK y del PDF. Railway seguirá
-activo hasta contar con esa aceptación y con aprobación separada para retirar
-el servicio exacto.
+La dueña aceptó el APK y el PDF el 17 de octubre de 2026. Luego aprobó el retiro
+del servicio Railway `presupuestos_gen`, que publicaba
+`presupuestos.adrytentaciones.com.ar`. El servicio se eliminó y Railway informó
+cero servicios activos en ese entorno. El APK sigue funcionando sin conexión.
+
+Este APK de aceptación usa firma de depuración. Para futuras actualizaciones
+duraderas, configurá una clave propia como se describe arriba y conservála.
